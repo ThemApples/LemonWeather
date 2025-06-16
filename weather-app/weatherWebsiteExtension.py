@@ -1,5 +1,4 @@
 #weather wesite Extension
-
 import argparse
 import json
 import requests
@@ -54,7 +53,7 @@ def display_weather_info(weather_data):
 
 def create_website():
  st.header("This is basic website", divider = "rainbow")
- option = st.selectbox('Where are you looking for?',('Auckland','Tauranga','Wellington'))
+ option = st.selectbox('Where are you looking for?',('Auckland','Tauranga','Wellington','Hamilton','Christchurch','Rotorua','Queenstown'))
 
  api_key = _get_api_key() 
  st.write("this is result", option)
