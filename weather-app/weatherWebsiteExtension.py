@@ -8,32 +8,17 @@ from configparser import ConfigParser
 from urllib import parse, request
 from pprint import pp
 
-
+#Base URL the api
 BASE_WEATHER_API_URL = "https://api.openweathermap.org/data/2.5/weather"
 
+#Note (I am follow the method programming)
+#Getting api key
 def _get_api_key():
   config = ConfigParser()
   config.read("secrets.ini")
   return config["OpenWeather"]["api_key"]
 
-def read_user_cli_args():
-  parser = argparse.ArgumentParser(
-  description = "gets weather and temperature information" 
-  )
-
-  parser.add_argument(
-  "city", nargs="+", type=str, help= "enter the city name"
-  )
-
-  parser.add_argument(
-  "-i",
-  "--imperial",
-  action = "store_true", 
-  help = "display the termperature in imperial units",
-  )
-
-  return parser.parse_args()
-
+#Method to create the path pull the data from the base URL
 def build_weather_query(city_input, imperial = False):
  api_key = _get_api_key()
  city_name = " ".join(city_input)
@@ -44,23 +29,32 @@ def build_weather_query(city_input, imperial = False):
  f"nz&appid={api_key}")
  return url
 
+#This is extract the proper information and put it under one string method
 def display_weather_info(weather_data):
  first_L = weather_data['weather']
- second_L = "Weather Condition: "+ first_L[0]['main'] + " Description: " +first_L[0]['description']
- print(second_L)
+ second_L = "Weather Condition: "+ first_L[0]['main'] + " <br> Description: " +first_L[0]['description']
  parts = str(second_L)
  return parts
 
+#Method to creating the website
 def create_website():
- st.header("This is basic website", divider = "rainbow")
+
+ #Header to the website 
+ st.header("LemonWeather", divider = "rainbow")
+
+ #Giving the user the option to install
  option = st.selectbox('Where are you looking for?',('Auckland','Tauranga','Wellington','Hamilton','Christchurch','Rotorua','Queenstown'))
 
+ #Calling the method and combining methods to display
  api_key = _get_api_key() 
- st.write("this is result", option)
  urlss = build_weather_query(option)
  data = requests.get(urlss).json()
  splits = display_weather_info(data)
- st.write(splits)
+
+ #Importing css styles into the results
+ #Attempting to make the results look like a widget
+ import streamlit.components.v1 as components
+ components.html("<html><style>h1 {border-radius:25px; background:#73AD21; padding: 20px;}</style><body><h1>"+splits+ "</h1></body></html>")
 
 if __name__ == "__main__":
 
