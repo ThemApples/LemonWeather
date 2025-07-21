@@ -7,6 +7,7 @@ import streamlit as st
 from configparser import ConfigParser
 from urllib import parse, request
 from pprint import pp
+#from streamlit_card import card
 
 #Base URL the api
 BASE_WEATHER_API_URL = "https://api.openweathermap.org/data/2.5/weather"
@@ -36,6 +37,12 @@ def display_weather_info(weather_data):
  parts = str(second_L)
  return parts
 
+#Getting more information url
+def display_weather_hum(weather_data):
+ hum = weather_data['main']
+ hum_dis = "humidity:" + str(hum['humidity'])
+ return hum_dis 
+
 #Method to creating the website
 def create_website():
 
@@ -50,11 +57,20 @@ def create_website():
  urlss = build_weather_query(option)
  data = requests.get(urlss).json()
  splits = display_weather_info(data)
+ hum_des = display_weather_hum(data)
 
  #Importing css styles into the results
  #Attempting to make the results look like a widget
- import streamlit.components.v1 as components
- components.html("<html><style>h1 {border-radius:25px; background:#73AD21; padding: 20px;}</style><body><h1>"+splits+ "</h1></body></html>")
+ #import streamlit.components.v1 as components
+ #components.html("<div class="card"><div class="card-body">"+splits+hum_des +"</div></div>")
+ col_small,col2 = st.columns([0.4,0.6])
+ with col_small:
+    with st.container(border=True):
+     option2 = st.selectbox("What are you looking:", ('Temperature','Wind Speed'), width=150)
+     if(option2 == 'Temperature'):
+        st.write(":material/thermostat: Temperature display")
+     if(option2 == 'Wind Speed'):
+        st.write('Wind speed')
 
 if __name__ == "__main__":
 
