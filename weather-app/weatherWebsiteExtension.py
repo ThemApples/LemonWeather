@@ -40,8 +40,21 @@ def display_weather_info(weather_data):
 #Getting more information url
 def display_weather_hum(weather_data):
  hum = weather_data['main']
- hum_dis = "humidity:" + str(hum['humidity'])
+ print(weather_data) 
+ hum_dis = str(hum['humidity'])
  return hum_dis 
+
+#Getting wind information
+def display_weather_wind(weather_data):
+ wind = weather_data['wind']
+ wind_dis = str(wind['speed'])
+ return wind_dis
+
+#Getting Temperature
+def display_temperature(weather_data):
+ temperature = weather_data['main']
+ temperature_dis = str(temperature['temp'])
+ return temperature_dis
 
 #Method to creating the website
 def create_website():
@@ -56,8 +69,11 @@ def create_website():
  api_key = _get_api_key() 
  urlss = build_weather_query(option)
  data = requests.get(urlss).json()
+
  splits = display_weather_info(data)
  hum_des = display_weather_hum(data)
+ wind_des = display_weather_wind(data)
+ temperature_des = display_temperature(data)
 
  #Importing css styles into the results
  #Attempting to make the results look like a widget
@@ -66,11 +82,13 @@ def create_website():
  col_small,col2 = st.columns([0.4,0.6])
  with col_small:
     with st.container(border=True):
-     option2 = st.selectbox("What are you looking:", ('Temperature','Wind Speed'), width=150)
+     option2 = st.selectbox("What are you looking:", ('Temperature','Wind Speed','Humidity'), width=150)
      if(option2 == 'Temperature'):
-        st.write(":material/thermostat: Temperature display")
+        st.write(':material/thermostat: ' + temperature_des)
      if(option2 == 'Wind Speed'):
-        st.write('Wind speed')
+        st.write('💨 ' + wind_des + "mph")
+     if(option2 == 'Humidity'):
+        st.write('💧 ' + hum_des)
 
 if __name__ == "__main__":
 
